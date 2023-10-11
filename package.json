@@ -1,0 +1,25 @@
+{
+    "name": "mysql-with-prisma-mid",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@prisma/client": "^5.4.2",
+        "next": "^13.5.4",
+        "nextjs-toploader": "^1.4.2",
+        "react": "latest",
+        "react-dom": "latest",
+        "react-hot-toast": "^2.4.1"
+    },
+    "devDependencies": {
+        "autoprefixer": "latest",
+        "postcss": "latest",
+        "prisma": "^5.4.2",
+        "tailwindcss": "latest"
+    }
+}
