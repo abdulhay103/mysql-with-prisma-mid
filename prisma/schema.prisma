@@ -11,106 +11,53 @@ datasource db {
 }
 
 model user {
-  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  email      String   @unique
-  password   String
-  created_at DateTime @default(now()) @db.Timestamp(0)
-  updated_at DateTime @default(now()) @db.Timestamp(0)
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @db.Timestamp(0)
 
   // Ctreate relationship
-  profile          profile?
-  categories       categories[]
-  customers        customers[]
-  products         products[]
-  invoices         invoices[]
-  invoice_products invoice_products[]
+  profile profile?
+  post    post[]
+  comment comment[]
 }
 
 model profile {
-  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  firstName  String
-  lastName   String
-  mobile     String
-  user_id    BigInt   @unique @db.UnsignedBigInt
-  created_at DateTime @default(now()) @db.Timestamp(0)
-  updated_at DateTime @default(now()) @db.Timestamp(0)
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  firstName String
+  lastName  String
+  mobile    String
+  userId    BigInt   @unique @db.UnsignedBigInt
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @db.Timestamp(0)
 
   //Create Relationship
-  user user @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  user user @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
 
-model categories {
-  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  name       String
-  user_id    BigInt   @db.UnsignedBigInt
-  created_at DateTime @default(now()) @db.Timestamp()
-  updated_at DateTime @default(now()) @db.Timestamp()
-
-  // Ctreate relationship
-  products products[]
-  user     user       @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
-}
-
-model customers {
-  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  name       String
-  email      String
-  mobile     String
-  user_id    BigInt   @db.UnsignedBigInt
-  created_at DateTime @default(now()) @db.Timestamp(0)
-  updated_at DateTime @default(now()) @db.Timestamp(0)
-
-  // Ctreate relationship
-  invoices invoices[]
-  user     user       @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
-}
-
-model products {
+model post {
   id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  user_id     BigInt   @db.UnsignedBigInt
-  category_id BigInt   @db.UnsignedBigInt
-  name        String
-  price       String
-  unit        String
-  img_url     String
-  create_at   DateTime @default(now()) @db.Timestamp()
-  updated_at  DateTime @default(now()) @db.Timestamp()
+  title       String
+  description String
+  userId      BigInt   @db.UnsignedBigInt
+  createdAt   DateTime @default(now()) @db.Timestamp()
+  updatedAt   DateTime @default(now()) @db.Timestamp()
 
   // Ctreate relationship
-  invoice_products invoice_products[]
-  user             user               @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  categories       categories         @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  comment comment[]
+  user    user      @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
 
-model invoices {
-  id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  total       String
-  discount    String
-  vat         String
-  payable     String
-  user_id     BigInt   @db.UnsignedBigInt
-  customer_id BigInt   @db.UnsignedBigInt
-  created_at  DateTime @default(now()) @db.Timestamp()
-  updated_at  DateTime @default(now()) @db.Timestamp()
+model comment {
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  text      String
+  userId    BigInt   @db.UnsignedBigInt
+  postId    BigInt   @db.UnsignedBigInt
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @db.Timestamp(0)
 
   // Ctreate relationship
-  invoice_products invoice_products[]
-  user             user               @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  customers        customers          @relation(fields: [customer_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
-}
-
-model invoice_products {
-  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  invoice_id BigInt   @db.UnsignedBigInt
-  product_id BigInt   @db.UnsignedBigInt
-  user_id    BigInt   @db.UnsignedBigInt
-  qty        String
-  sale_price String
-  create_at  DateTime @default(now()) @db.Timestamp(0)
-  updatwd_at DateTime @default(now()) @db.Timestamp(0)
-
-  // Ctreate relationship
-  invoices invoices @relation(fields: [invoice_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  user     user     @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  products products @relation(fields: [product_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  user user @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  post post @relation(fields: [postId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
