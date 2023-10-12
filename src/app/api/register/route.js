@@ -24,12 +24,12 @@ export async function POST(req) {
         });
         return NextResponse.json({
             status: "Registration Success",
-            result: user,
+            data: user,
         });
     } catch (error) {
         return NextResponse.json({
             status: "Registration Fail",
-            result: error.toString(),
+            data: error.toString(),
         });
     }
 }

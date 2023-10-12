@@ -36,6 +36,8 @@ export default function Login() {
                 alert("Invalid Email");
             } else if (password.length == 0) {
                 alert("Invalid Password");
+            } else if (data.data === null) {
+                toast.error("Your email or Password Dosn't Match");
             } else {
                 toast.success("Login Successful");
                 router.replace("/dashboard");

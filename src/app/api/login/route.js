@@ -1,19 +1,28 @@
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-export async function POST(req) {
-    const res = await req.json();
-    let email = res["email"];
-    let password = res["password"];
+export async function GET(req) {
+    try {
+        const prisma = new PrismaClient();
+        const reqBody = await req.json();
+        const email = reqBody["email"];
+        let password = reqBody["password"];
 
-    if (email) {
-        return NextResponse.json({
-            status: "success",
-            email: email,
-            password: password,
+        let result = await prisma.user.findUnique({
+            where: {
+                email: email,
+                password: password,
+            },
         });
-    } else {
+
         return NextResponse.json({
-            status: "Fail",
+            status: "Login Success",
+            data: result,
+        });
+    } catch (error) {
+        return NextResponse.json({
+            status: "Login Fail",
+            data: error.toString(),
         });
     }
 }
