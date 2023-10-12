@@ -2,17 +2,24 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-    BigInt.prototype.toString = function () {
+    BigInt.prototype.toJSON = function () {
         return this.toString();
     };
+
     try {
         const prisma = new PrismaClient();
-        // const reqBody = await req.json();
-        let user = await prisma.profile.create({
+        const reqBody = await req.json();
+        let user = await prisma.user.create({
             data: {
-                firstName: "Ok",
-                lastName: "test",
-                mobile: "123",
+                email: reqBody["email"],
+                password: reqBody["password"],
+                profile: {
+                    create: {
+                        firstName: reqBody["firstName"],
+                        lastName: reqBody["lastName"],
+                        mobile: reqBody["mobile"],
+                    },
+                },
             },
         });
         return NextResponse.json({
